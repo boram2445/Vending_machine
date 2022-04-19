@@ -17,32 +17,17 @@
     font-family: 'Noto Sans KR', sans-serif;
 }
 
-html,body,p,ul,h2{
-    margin:0;
-    padding:0;   
-}
-
-button{
-    cursor: pointer; 
-    background: inherit; 
-    border:none;
-}
-ul, li{
-    list-style: none;
-}
-input{
-    border:none;
-}
-h2{
-    font-size: inherit;
-    font-weight: inherit;
-}
 
 /* decorate*/
 body{
     background-color:var(--light-purple);
 }
 
+button:hover{
+    opacity: 0.8;
+}
+
+/* header */
 .header{
     text-align: center;
 }
@@ -58,30 +43,24 @@ main{
     justify-content: center;
 }
 
-button:hover{
-    opacity: 0.8;
-}
-
 /* main_top */
-
-.main_top{
+.main-top{
     width: 360px;
-    height: 545px;
+    /* height: 545px; */
     background-color: var(--white);
     padding:27px;
 }
+
 /* menu_wrapper */
-.menu_wrapper{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
+.menu-wrapper{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:12px;
+    margin-bottom: 20px; 
 }
 
-.menu_box{
+.menu-box{
     width: 94px;
-    height: 130px;
-    margin-bottom: 12px;
-    border: 1px var(--light-gray) solid; 
     box-shadow: 0px 0px 3px 0px #00000080;
     border-radius: 10px;
     font-size: 9px;
@@ -89,31 +68,34 @@ button:hover{
     text-align: center;
 }
 
-.menu_box p{
-    line-height: 13px;
+.menu-box p{
+    line-height: 10px;
+    margin-top: 6px;
 }
 
-.menu_box.selected{
-    border: 3px var(--purple) solid; 
+.menu-box.selected{
+    outline: 3px var(--purple) solid; 
 }
 
-.menu_box img{
-    margin-top:12.5px;
+.menu-box img{
+    margin-top:10px;
     width: 36px;
     height: 65px;
 }
 
-.menu_box button{
+.menu-box button{
     margin-top: 7px;
-    margin-bottom: 14px;
+    margin-bottom: 9px;
     width: 70px;
-    height: 22px;
+    line-height: 22px;
     border-radius: 50px;
     background-color: var(--purple);
     color:var(--white);
 }
+
 /* charge_wrapper */
-.charge_wrapper button{
+/* grid로 바꾸다가 실패함... */
+.refund-btn, .charge-btn{
     padding:0;
     font-size: 13px;
     width: 94px;
@@ -121,84 +103,69 @@ button:hover{
     margin-left:12px;
     background: #FFFFFF;
     box-shadow: 0px 0px 3px 0px #00000080;
-    border: 1px var(--light-gray) solid; 
     border-radius: 5px;
 }
 
-.charge_top{
+.charge-top{
     display: flex;
 }
 
-.charge_top div{
-    display: flex;
-    justify-content: space-between;
+.charge-box{
     width: 200px;
-    height: 33px;
+    line-height: 33px;
     border-radius: 5px;
-    padding: 6px 10px 7px 10px;
+    padding: 0 10px;
     background-color: var(--light-purple);
 }
 
-.charge_top p{
-    justify-content: space-between;
+.charge-box p:nth-child(1){
+    float:left;
 }
 
-.charge_middle{
+.charge-box p:nth-child(2){
+    float: right;
+}
+
+.charge-middle{
     display: flex;
-    margin-top: 11px;
-    margin-bottom:12px;
+    margin: 11px auto 12px;
 }
 
-.charge_middle input{
+.charge-middle input{
     width: 200px;
-    height: 33px;
+    padding: 6px 0 7px 6px;
     font-size: 13px ;
     color:var(--light-gray);
     border: var(--light-gray) solid 1px;
-    padding: 6px auto  7px 6px;
     border-radius: 5px;
 }
 
-.charge_bottom{
+.charge-bottom{
     display: flex;
 }
 
-.charge_bottom button{
+.get-btn{
+    margin-left: 12px;
+    padding: 43px 35px 44px;
     background-color: var(--purple);
-    border-color:transparent;
     color:var(--white);
     border-radius: 5px;
     width: 94px;
-    height: 106px;
     font-size: 13px;
 }
 
-.select_lists{
+.select-lists{
     border: 1px var(--light-gray) solid;
     background-color: var(--light-purple);
     width: 200px;
     height: 106px;
     font-size: 9px;
-    margin-bottom:24px;
-    overflow-y: auto;
-    overflow-x: hidden ;
+    overflow: hidden scroll;
     padding:12px;
+    border-radius: 5px;
 }
 
-.select_lists::-webkit-scrollbar {
-    width:4px;
-}
-.select_lists::-webkit-scrollbar-thumb {
-    background-color: var(--white);
-    border-radius: 10px;
-}
-.select_lists::-webkit-scrollbar-track {
-    background-color: transparent;
-    border-radius: 10px;
-    box-shadow: inset 0px 0px 5px white;
-}
-
-.select_list{
+.select-list{
     margin: 0 auto 6px;
     width: 170px;
     height: 46px;
@@ -208,12 +175,13 @@ button:hover{
     background-color: var(--white);
 }
 
-.select_list img{
+.select-list img{
     height: 33px;
     width: 18px;
 }
 
-.select_num{
+/* box size를 height주지 않고 다른 방법이 있을까? */
+.select-num{
     width:30px;
     height: 30px;
     font-size:14px;
@@ -225,81 +193,69 @@ button:hover{
 }
 
 /* main_bottom */
-
-.main_bottom{
+.main-bottom{
     margin-left: 28px;
     width: 360px;
     height: 545px;
     background-color: var(--light-purple);
 }
 
-.money_box{
+.money-box{
     width: 360px;
-    height: 50px;
     background-color: var(--white);
     padding: 9px 27px;
 }
 
-.money_wrapper{
+/* 정렬을 line-height로 하는게 맞는지...? */
+/* float 정렬을 하고 싶었는데 잘 안됨. */
+.money-wrapper{
     background-color: var(--light-purple);
+    line-height: 32px;
     display: flex;
     justify-content: space-between;
     font-size: 14px;
     font-weight: 700;
-    padding: 6px 10px;
+    padding: 0 10px;
     border-radius: 5px;
 }
 
-.drink_box{
+.drink-box{
     margin-top:20px;
     width: 360px;
     height: 474px;
     background-color: var(--white);
-    text-align: center;
     display: flex;
     flex-direction:column;
     justify-content: center;
     align-items: center;
 }
 
-.drink_box h2{
+.drink-box h2{
+    text-align: center;
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 12px;
 }
 
-.drink_wrapper{
+.drink-wrapper{
     width: 306px;
     height: 364px;
     background-color: var(--light-purple);
     padding: 12px;
-    overflow-y: scroll;
-    overflow-x: hidden;
+    overflow: hidden scroll;
     border: var(--light-gray) 1px solid;
     border-radius: 5px;
 }
 
-.drink_wrapper::-webkit-scrollbar {
-    width:4px;
-}
-.drink_wrapper::-webkit-scrollbar-thumb {
-    background-color: var(--white);
-    border-radius: 10px;
-}
-.drink_wrapper::-webkit-scrollbar-track {
-    background-color: transparent;
-    border-radius: 10px;
-    box-shadow: inset 0px 0px 5px white;
-}
-
+/* float로 변경하고 싶은데 잘 안됨.. */
 .drink{
     width: 276px;
-    height: 46px;
+    padding: 6px 10px;
+    margin-bottom:6px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     background-color: var(--white);
-    padding: 10px 6px;
-    margin-bottom:6px;
     font-size: 9px;
     border-radius: 5px;
 }
@@ -315,12 +271,8 @@ button:hover{
     margin-right: 10px;
 }
 
-.select_num{
-    font-size: 14px;
-    font-weight: 500;
-}
-
 .sum{
+    /* 정렬 어째야 할지?  */
     width:100%;
     display:inline;
     text-align: end;
@@ -328,4 +280,24 @@ button:hover{
     font-size:12px; 
     font-weight: 500;
     margin-top: 6px;
+}
+
+/* scroll */
+.select-lists::-webkit-scrollbar,
+.drink-wrapper::-webkit-scrollbar
+{
+    width:4px;
+}
+.select-lists::-webkit-scrollbar-thumb,
+.drink-wrapper::-webkit-scrollbar-thumb
+{
+    background-color: var(--white);
+    border-radius: 10px;
+}
+.select-lists::-webkit-scrollbar-track,
+.drink-wrapper::-webkit-scrollbar-track 
+{
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
 }

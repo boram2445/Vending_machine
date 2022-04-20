@@ -28,25 +28,37 @@ button:hover{
 }
 
 /* header */
-.header{
+/* .header{
     text-align: center;
 }
 
 .logo{
     width: 386px;
     height: 180px;
+} */
+
+.tit-app{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    max-width: 386px;
+    height: 180px;
+    background-image: url("images/logo.svg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
 }
 
 main{
-    margin-top: 67px;
     display: flex;
     justify-content: center;
+    align-content: center;
+    padding-top: 248px;
 }
 
 /* main_top */
 .main-top{
     width: 360px;
-    /* height: 545px; */
     background-color: var(--white);
     padding:27px;
 }
@@ -300,4 +312,14 @@ main{
     background-color: transparent;
     border-radius: 10px;
     box-shadow: inset 0px 0px 5px white;
+}
+
+
+@media screen and (max-width:768px) {
+    main {
+        flex-wrap: wrap;
+    }
+    .main-bottom{
+        margin:0;
+    }
 }

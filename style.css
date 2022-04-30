@@ -1,0 +1,293 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Noto+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root{
+    --light-purple:#EAE8FE;
+    --purple: #6327FE;
+    --white:#FFFFFF;
+    --light-gray:#BDBDBD;
+    --gray:#333333;
+    --black:#000000;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background-color:var(--light-purple);
+}
+
+#app{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 247px;
+    gap: 0 28px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+#app .tit-app{
+    position: absolute;
+    top:0;
+    width:386px;
+    height:180px;
+    background-image: url("images/logo.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#app .vending-machine,
+#app .my-info {
+    width: 360px;
+}
+
+/* vending-machine */
+.vending-machine{
+    background-color: var(--white);
+    padding: 28px 24px;
+}
+
+.vending-machine .list-item{
+    display: grid;
+    gap:12px;
+    grid-template-columns: repeat(3,1fr);
+}
+
+.list-item .btn-item{
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+    padding: 11px 11px 9px 11px;
+    position: relative;
+}
+
+.list-item .btn-item:active{
+    outline:var(--purple) 3px solid;
+}
+
+.list-item .btn-item.sold-out::before{
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 10px;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background: no-repeat center / 60px 46px url(images/Sold-out.svg) rgba(0, 0, 0, 0.8);
+}
+
+.list-item .btn-item::after{
+    content:'품절';
+    overflow: hidden;
+    position: absolute;
+    text-indent: -9999px;
+    line-height: 0;
+    font-size: 1px;
+    color: transparent;
+}
+
+.list-item .btn-item.sold-out{
+    pointer-events: none;
+}
+
+.list-item .img-item{
+    width: 36px;
+    height: 65px;
+}
+
+.list-item .tit-item{
+    display: block;
+    font-size: 9px;
+    line-height: 13px;
+    padding: 6px 0 7px;
+}
+
+.list-item .txt-price{
+    display: inline-block;
+    padding:5px 16px;
+    background-color: var(--purple);
+    border-radius: 50px;
+    color:var(--white);
+    font-size: 12px;
+}
+
+.vending-machine .cont-buy{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 11px 12px;
+    margin-top: 20px;
+}
+
+.cont-buy .info-balance,
+.cont-buy .inp-put,
+.cont-buy .list-item-staged{
+    grid-column: 1/3;
+}
+
+.cont-buy .info-balance{
+    background-color: var(--light-purple);
+    line-height: 20px;
+    border-radius: 5px;
+    padding: 6px 10px 7px 10px;
+    font-size:14px;
+}
+
+.cont-buy .txt-balance{
+    float:right;
+}
+
+.cont-buy .btn-balance,
+.cont-buy .btn-put{
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.cont-buy .inp-put{
+    padding: 6px 0 6px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--light-gray);
+    font-size:13px;
+    color: var(--light-gray);
+}
+
+.cont-buy .list-item-staged{
+    height: 106px;
+    overflow-y:scroll;
+    background-color: var(--light-purple);
+    padding: 12px 14px 12px 12px;
+    border-radius: 4px;
+    border: 1px solid var(--light-gray);
+}
+
+.btn-staged{
+    background-color: var(--white);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.btn-staged .img-item-staged{
+    width: 18px;
+    height: 30px;
+    float:left;
+    margin-right:10px;
+}
+
+.btn-staged .tit-item-staged{
+    font-size: 9px;
+    float:left;
+    line-height: 32px;
+}
+
+.btn-staged .price-item-staged{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:30px;
+    height: 30px;
+    border: 1px solid var(--light-gray);
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 20px;
+    float:right;
+}
+
+.cont-buy .btn-get{
+    background-color: var(--purple);
+    border-radius: 4px;
+    color:var(--white);
+}
+
+/* my-info */
+.my-info .cont-mymoney, 
+.my-info .cont-myitem{
+    background-color: var(--white);
+}
+
+.my-info .cont-mymoney{
+    margin-bottom: 20px;
+    padding: 9px 27px;
+    border-radius: 4px;
+}
+
+.my-info .info-mymoney{
+    background-color: var(--light-purple);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.my-info .txt-mymoney{
+    float: right;
+}
+
+.my-info .cont-myitem{
+    padding: 25px 27px 32px; 
+}
+
+.my-info .list-myitem{
+    height: 364px;
+    width: 306px;
+    padding: 12px 14px 12px 12px;
+    background-color: var(--light-purple);
+    border: 1px solid var(--light-gray);
+    border-radius: 4px;
+}
+
+.cont-myitem .tit-myitem{
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 13px;
+}
+
+.cont-myitem .txt-total{
+    font-size: 12px;
+    line-height: 17px;
+    margin:6px;
+    display: block;
+    text-align: right;
+}
+
+/* scroll */
+.list-item-staged::-webkit-scrollbar,
+.drink-wrapper::-webkit-scrollbar
+{
+    width:4px;
+}
+.list-item-staged::-webkit-scrollbar-thumb,
+.drink-wrapper::-webkit-scrollbar-thumb
+{
+    background-color: var(--white);
+    border-radius: 10px;
+}
+.list-item-staged::-webkit-scrollbar-track,
+.drink-wrapper::-webkit-scrollbar-track 
+{
+    background-color: transparent;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+}
+
+
+@media screen and (max-width:390px){
+    body {
+        background-color: var(--white);
+    }
+
+    #app {
+        padding-top: 65px;
+    }
+
+    #app .tit-app {
+        width: 166px;
+        height: 70px;
+    }
+
+    .my-info .cont-myitem {
+        margin-top: 0;
+        padding: 31px 27px 32px;
+    }
+}

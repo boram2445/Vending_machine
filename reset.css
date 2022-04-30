@@ -43,12 +43,26 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-button{
-    cursor: pointer; 
-    background: inherit; 
-    border:none;
-	padding: 0;
-}
+
 ul,li{
     list-style: none;
+}
+
+button {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.ir {
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    text-indent: -9999px;
+    line-height: 0;
+    font-size: 1px;
+    color: transparent;
 }

@@ -160,6 +160,10 @@ body{
     border: 1px solid var(--light-gray);
 }
 
+.list-item-staged li{
+    margin-bottom: 3px;
+}
+
 .btn-staged{
     background-color: var(--white);
     border-radius: 4px;

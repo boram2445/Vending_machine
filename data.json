@@ -5,42 +5,48 @@
       "src": "./images/Original_Cola.png",
       "name": "Original_Cola",
       "price": 1000,
-      "stock": 5
+      "stock": 5,
+      "cart":0
     },
     {
       "id": 1,
       "src": "./images/Violet_Cola.png",
       "name": "Violet_Cola",
       "price": 1000,
-      "stock": 5
+      "stock": 5,
+      "cart":0
     },
     {
       "id": 2,
       "src": "./images/Yellow_Cola.png",
       "name": "Yellow_Cola",
       "price": 1000,
-      "stock": 5
+      "stock": 5,
+      "cart":0
     },
     {
       "id": 3,
       "src": "./images/Cool_Cola.png",
       "name": "Cool_Cola",
       "price": "1000",
-      "stock": 5
+      "stock": 5,
+      "cart":0
     },
     {
       "id": 4,
       "src": "./images/Green_Cola.png",
       "name": "Green_Cola",
       "price": 1000,
-      "stock": 5
+      "stock": 5,
+      "cart":0
     },
     {
       "id": 5,
       "src": "./images/Orange_Cola.png",
       "name": "Orange_Cola",
       "price": 1000,
-      "stock": 5
+      "stock": 5,
+      "cart":0
     }
   ]
 }

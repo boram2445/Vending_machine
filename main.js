@@ -4,6 +4,8 @@ const cartContainer = document.querySelector('.list-item-staged');
 let items = [];
 let cart = [];
 let myBeverage = [];
+let inputMoney = 0;
+let myMoney = 30000;
 
 //0. data 받아오기 
 function loadItems(){
@@ -93,10 +95,67 @@ function handleSoldOut(item){
     }
 }
 
+/*3.입금액 입력 
+3-1. 입금액 입력안하고 획득 누르면, 금액을 입력하세요 알림
+3-2. 입금액을 입력하고 -> 입금 버튼 누르면 -> 잔액 업데이트 -> 소지금 줄이기 
+3-3. 입금액이 있는 상태에서 -> 획득 눌렀는데 잔액이 부족하면 -> 잔액이 부족합니다.
+                        -> 잔액이 있으면 -> 잔액 = 잔액-총금액 => 획득한 음료에 추가하기 
+3-4. 거스름돈 반환 버튼 누르면 -> 소지금에 넣기 
+*/
+
+//3. 입금액 입력 기능
+const balance = document.querySelector('.txt-balance');
+function addMondy(){
+    const input = document.querySelector('.inp-put');
+    const inputBtn = document.querySelector('.btn-put');
+    inputBtn.addEventListener('click', ()=>{
+        if(input.value == '') return; 
+        let leftMoney = myMoney-parseInt(input.value);
+        if(leftMoney < 0){
+            alert('⛔소지한 금액이 부족합니다.');
+            return; 
+        }
+        inputMoney+=parseInt(input.value);
+        myMoney=leftMoney;
+        input.value = '';
+        balance.textContent = `${inputMoney} 원`;
+    })
+}
+
+//3-1. 카트상품 획득 기능 
+function getItem(){
+    const getBtn = document.querySelector('.btn-get');
+    getBtn.addEventListener('click',()=>{
+        if(cart.length === 0){
+            alert('🥤음료를 선택해주세요');
+            return;
+        }
+        if(inputMoney === 0){
+            alert('💵돈을 투입해 주세요');
+            return;
+        }
+        let cartCost = 0;
+        cart.forEach((item)=>{cartCost+=(item.price*item.cart)});
+        if(cartCost > inputMoney){
+            alert('💵잔액이 부족합니다. 돈을 더 투입해주세요');
+            return;
+        }
+        myBeverage = [...cart];
+        cart.forEach((item)=>item.cart = 0);
+        balance.textContent = `${inputMoney-cartCost} 원`;
+        inputMoney = 0;
+        cart = [];
+        addCart();
+        cartCost = 0;
+    })
+}
+
 loadItems()
     .then(items => {
         displayItems(items); 
         setEventListener(items); 
         removeCart(); 
+        addMondy();
+        getItem(); 
     })
     .catch(console.log());

@@ -59,8 +59,6 @@ function setEventListener(){
         let itemIndex = items.findIndex((item)=> item.id == clicked.dataset.id);
         let cartIndex = cart.findIndex((item)=> item.id === items[itemIndex].id);
         if(cart.length === 0 || cartIndex === -1){
-            console.log('yes');
-            console.log(cart);
             items[itemIndex].cart+=1;
             cart.unshift(items[itemIndex]);
         } else{
@@ -121,15 +119,15 @@ function addMondy(){
         }
         inputMoney+=parseInt(input.value);
         myMoney=leftMoney;
-        txtMyMoney.textContent = `${myMoney} 원`;
+        txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
         input.value = '';
-        balance.textContent = `${inputMoney} 원`;
+        balance.textContent = `${makeMoneyDot(inputMoney)} 원`;
     })
     btnBalance.addEventListener('click',()=>{
         myMoney+=inputMoney;
-        txtMyMoney.textContent = `${myMoney} 원`;
+        txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
         inputMoney = 0;
-        balance.textContent = `${inputMoney} 원`;
+        balance.textContent = `${makeMoneyDot(inputMoney)} 원`;
     })
 }
 
@@ -151,13 +149,13 @@ function getItem(){
             alert('💵잔액이 부족합니다. 돈을 더 투입해주세요');
             return;
         }
-        balance.textContent = `${inputMoney-cartCost} 원`;
+        balance.textContent = `${makeMoneyDot(inputMoney-cartCost)} 원`;
         totalPay+=cartCost;
-        txtTotalPay.textContent = `총금액 : ${totalPay}원`;
+        txtTotalPay.textContent = `총금액 : ${makeMoneyDot(totalPay)}원`;
         cart.forEach((item)=>{
             let myIndex = myBeverage.findIndex((myItem)=>myItem.id == item.id);
             if( myIndex === -1){
-                item.mine = 1; 
+                item.mine = item.cart; 
                 myBeverage.push(item);
             } else{
                 myBeverage[myIndex].mine += item.cart
@@ -189,12 +187,21 @@ function createBeverItem(item){
 }
 
 function init(items){
-    txtMyMoney.textContent = `${myMoney} 원`;
+    txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
     displayItems(items); 
     setEventListener(items); 
     removeCart(); 
     addMondy();
     getItem(); 
+}
+
+function makeMoneyDot(money){
+    let reverseNum = money.toString().split('').reverse();
+    for(let i=3; i<reverseNum.length; i+=3){
+        reverseNum.splice(i,0,',');
+    }
+    let result = reverseNum.reverse().join('');
+    return result;
 }
 
 loadItems()

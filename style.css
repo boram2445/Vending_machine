@@ -239,6 +239,10 @@ body{
     border-radius: 4px;
 }
 
+.list-myitem li{
+    margin-bottom: 5px;
+}
+
 .cont-myitem .tit-myitem{
     font-size: 14px;
     line-height: 20px;

@@ -1,11 +1,13 @@
 'use strict';
 const container = document.querySelector('.list-item');
 const cartContainer = document.querySelector('.list-item-staged');
+const txtMyMoney = document.querySelector('.txt-mymoney');
 let items = [];
 let cart = [];
 let myBeverage = [];
 let inputMoney = 0;
 let myMoney = 30000;
+let totalPay = 0;
 
 //0. data 받아오기 
 function loadItems(){
@@ -57,6 +59,8 @@ function setEventListener(){
         let itemIndex = items.findIndex((item)=> item.id == clicked.dataset.id);
         let cartIndex = cart.findIndex((item)=> item.id === items[itemIndex].id);
         if(cart.length === 0 || cartIndex === -1){
+            console.log('yes');
+            console.log(cart);
             items[itemIndex].cart+=1;
             cart.unshift(items[itemIndex]);
         } else{
@@ -95,29 +99,36 @@ function handleSoldOut(item){
     }
 }
 
-/*3.입금액 입력 
-3-1. 입금액 입력안하고 획득 누르면, 금액을 입력하세요 알림
-3-2. 입금액을 입력하고 -> 입금 버튼 누르면 -> 잔액 업데이트 -> 소지금 줄이기 
-3-3. 입금액이 있는 상태에서 -> 획득 눌렀는데 잔액이 부족하면 -> 잔액이 부족합니다.
-                        -> 잔액이 있으면 -> 잔액 = 잔액-총금액 => 획득한 음료에 추가하기 
-3-4. 거스름돈 반환 버튼 누르면 -> 소지금에 넣기 
-*/
-
 //3. 입금액 입력 기능
 const balance = document.querySelector('.txt-balance');
+const txtTotalPay = document.querySelector('.txt-total');
+const myBeverageList = document.querySelector('.list-myitem');
+const btnBalance = document.querySelector('.btn-balance');
 function addMondy(){
     const input = document.querySelector('.inp-put');
     const inputBtn = document.querySelector('.btn-put');
     inputBtn.addEventListener('click', ()=>{
         if(input.value == '') return; 
+        if(isNaN(input.value)){
+            alert('입력값을 확인해 주세요');
+            input.value = '';
+            return;
+        }
         let leftMoney = myMoney-parseInt(input.value);
         if(leftMoney < 0){
-            alert('⛔소지한 금액이 부족합니다.');
+            alert('⛔소지금이 부족합니다.');
             return; 
         }
         inputMoney+=parseInt(input.value);
         myMoney=leftMoney;
+        txtMyMoney.textContent = `${myMoney} 원`;
         input.value = '';
+        balance.textContent = `${inputMoney} 원`;
+    })
+    btnBalance.addEventListener('click',()=>{
+        myMoney+=inputMoney;
+        txtMyMoney.textContent = `${myMoney} 원`;
+        inputMoney = 0;
         balance.textContent = `${inputMoney} 원`;
     })
 }
@@ -140,22 +151,52 @@ function getItem(){
             alert('💵잔액이 부족합니다. 돈을 더 투입해주세요');
             return;
         }
-        myBeverage = [...cart];
-        cart.forEach((item)=>item.cart = 0);
         balance.textContent = `${inputMoney-cartCost} 원`;
-        inputMoney = 0;
+        totalPay+=cartCost;
+        txtTotalPay.textContent = `총금액 : ${totalPay}원`;
+        cart.forEach((item)=>{
+            let myIndex = myBeverage.findIndex((myItem)=>myItem.id == item.id);
+            if( myIndex === -1){
+                item.mine = 1; 
+                myBeverage.push(item);
+            } else{
+                myBeverage[myIndex].mine += item.cart
+            }
+        })
+        myBeverageList.innerHTML = takeBeverage();
+        inputMoney = inputMoney-cartCost;
         cart = [];
-        addCart();
+        items.forEach((item)=>item.cart = 0);
+        cartContainer.innerHTML = '';
         cartCost = 0;
     })
 }
 
+function takeBeverage(){
+    return myBeverage.map((item)=>createBeverItem(item)).join('');
+}
+
+function createBeverItem(item){
+    return `
+    <li>
+        <button type="button" class="btn-staged">
+            <img src=${item.src} class="img-item-staged">
+            <strong class="tit-item-staged">${item.name}</strong>
+            <span class="price-item-staged">${item.mine}</span>
+        </button>
+    </li>
+    `
+}
+
+function init(items){
+    txtMyMoney.textContent = `${myMoney} 원`;
+    displayItems(items); 
+    setEventListener(items); 
+    removeCart(); 
+    addMondy();
+    getItem(); 
+}
+
 loadItems()
-    .then(items => {
-        displayItems(items); 
-        setEventListener(items); 
-        removeCart(); 
-        addMondy();
-        getItem(); 
-    })
-    .catch(console.log());
+    .then(items => init(items))
+    .catch(console.log('음료 데이터를 불러오지 못했습니다.'));

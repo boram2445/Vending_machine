@@ -20,7 +20,7 @@ function loadItems(){
 }
 
 //1. 음료 아이템을 컨테이너에 만들어주기 
-function displayItems(items){
+function displayItems(){
     items.forEach(data => {
         const li = document.createElement('li');
         li.dataset.id = data.id; 
@@ -35,29 +35,29 @@ function displayItems(items){
 }
 
 //2. 카트 담기 기능 
-function addCart(){
-    cartContainer.innerHTML = cart.map((item)=>createCartItem(item)).join('');
+function addItems(arr, type){
+    return arr.map((item)=>createItem(item, type)).join('');
 }
 
-function createCartItem(item){
+function createItem(item,type){
     return `
-        <li data-id = ${item.id}>
-            <button type="button" class="btn-staged">
-                <img src=${item.src} class="img-item-staged">
-                <strong class="tit-item-staged">${item.name}</strong>
-                <span class="price-item-staged">${item.cart}</span>
-            </button>
-        </li>`;
+    <li data-id = ${item.id}>
+        <button type="button" class="btn-staged">
+            <img src=${item.src} class="img-item-staged">
+            <strong class="tit-item-staged">${item.name}</strong>
+            <span class="price-item-staged">${type==='cart' ? item.cart : item.mine}</span>
+        </button>
+    </li>`;
 }
 
-//2-1. 클릭된 아이템을 재고, 수량 관리 
-function setEventListener(){
+//2-1. 카트에 담기
+function addCart(){
     container.addEventListener('click', (event)=>{
         let target = event.target;
         if(target.parentNode.tagName === 'SECTION') return;
         const clicked = target.tagName === 'BUTTON' ? target.parentNode :  target.parentNode.parentNode;
         let itemIndex = items.findIndex((item)=> item.id == clicked.dataset.id);
-        let cartIndex = cart.findIndex((item)=> item.id === items[itemIndex].id);
+        let cartIndex = cart.findIndex((item)=> item.id == items[itemIndex].id);
         if(cart.length === 0 || cartIndex === -1){
             items[itemIndex].cart+=1;
             cart.unshift(items[itemIndex]);
@@ -66,7 +66,7 @@ function setEventListener(){
         }
         items[itemIndex].stock-=1;
         handleSoldOut(items[itemIndex]);
-        addCart();
+        cartContainer.innerHTML = addItems(cart,'cart');
     })
 }
 
@@ -83,7 +83,7 @@ function removeCart(){
             cart.splice(cartIndex,1);
         }
         handleSoldOut(items[itemIndex]);
-        addCart();
+        cartContainer.innerHTML = addItems(cart,'cart');
     })
 }
 
@@ -97,102 +97,102 @@ function handleSoldOut(item){
     }
 }
 
-//3. 입금액 입력 기능
 const balance = document.querySelector('.txt-balance');
 const txtTotalPay = document.querySelector('.txt-total');
 const myBeverageList = document.querySelector('.list-myitem');
 const btnBalance = document.querySelector('.btn-balance');
-function addMondy(){
+//3. 입금액 입력 기능
+
+//3.1 입금액 적절성 판단 
+function isValidMoney(money){
+    if(money == '') return; 
+    if(isNaN(money)){
+        alert('입력값을 확인해 주세요');
+        money = '';
+        return;
+    }
+    let leftMoney = myMoney-parseInt(money);
+    if(leftMoney < 0){
+        alert('⛔소지금이 부족합니다.');
+        return; 
+    }
+    return leftMoney; 
+}
+
+//3-2. 입금 기능 
+function addMoney(){
     const input = document.querySelector('.inp-put');
     const inputBtn = document.querySelector('.btn-put');
     inputBtn.addEventListener('click', ()=>{
-        if(input.value == '') return; 
-        if(isNaN(input.value)){
-            alert('입력값을 확인해 주세요');
-            input.value = '';
-            return;
-        }
-        let leftMoney = myMoney-parseInt(input.value);
-        if(leftMoney < 0){
-            alert('⛔소지금이 부족합니다.');
-            return; 
-        }
+        let leftMoney = isValidMoney(input.value);
+        if(!leftMoney) return; 
         inputMoney+=parseInt(input.value);
         myMoney=leftMoney;
-        txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
         input.value = '';
-        balance.textContent = `${makeMoneyDot(inputMoney)} 원`;
-    })
-    btnBalance.addEventListener('click',()=>{
-        myMoney+=inputMoney;
         txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
-        inputMoney = 0;
         balance.textContent = `${makeMoneyDot(inputMoney)} 원`;
     })
 }
 
-//3-1. 카트상품 획득 기능 
+//3-3. 거스름돈 반환 기능
+function backMoney(){
+    btnBalance.addEventListener('click',()=>{
+        myMoney+=inputMoney;
+        inputMoney = 0;
+        txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
+        balance.textContent = `${makeMoneyDot(inputMoney)} 원`;
+    })
+}
+
+//4. 카트상품 획득 기능 
+//4-1. 카트 상품 구매 가능 판단
+function isValidBuy(cartCost){
+    if(cart.length === 0){
+        alert('🥤음료를 선택해주세요');
+        return;
+    }
+    if(inputMoney === 0){
+        alert('💵돈을 투입해 주세요');
+        return;
+    }
+    cart.forEach((item)=>{cartCost+=(item.price*item.cart)});
+    if(cartCost > inputMoney){
+        alert('💵잔액이 부족합니다. 돈을 더 투입해주세요');
+        return;
+    }
+    return cartCost;
+}
+
+//4-2. 카트 클리어 기능
+function clearCart(){
+    cart = [];
+    items.forEach((item)=>item.cart = 0);
+    cartContainer.innerHTML = '';
+}
+
+//4-3. 카트 아이템 획득 기능
 function getItem(){
     const getBtn = document.querySelector('.btn-get');
     getBtn.addEventListener('click',()=>{
-        if(cart.length === 0){
-            alert('🥤음료를 선택해주세요');
-            return;
-        }
-        if(inputMoney === 0){
-            alert('💵돈을 투입해 주세요');
-            return;
-        }
         let cartCost = 0;
-        cart.forEach((item)=>{cartCost+=(item.price*item.cart)});
-        if(cartCost > inputMoney){
-            alert('💵잔액이 부족합니다. 돈을 더 투입해주세요');
-            return;
-        }
-        balance.textContent = `${makeMoneyDot(inputMoney-cartCost)} 원`;
-        totalPay+=cartCost;
-        txtTotalPay.textContent = `총금액 : ${makeMoneyDot(totalPay)}원`;
+        cartCost = isValidBuy(cartCost);
+        if(!cartCost) return;
         cart.forEach((item)=>{
             let myIndex = myBeverage.findIndex((myItem)=>myItem.id == item.id);
             if( myIndex === -1){
                 item.mine = item.cart; 
                 myBeverage.push(item);
             } else{
-                myBeverage[myIndex].mine += item.cart
+                myBeverage[myIndex].mine += item.cart;
             }
         })
-        myBeverageList.innerHTML = takeBeverage();
+        totalPay+=cartCost;
+        balance.textContent = `${makeMoneyDot(inputMoney-cartCost)} 원`;
+        txtTotalPay.textContent = `총금액 : ${makeMoneyDot(totalPay)}원`;
+        myBeverageList.innerHTML = addItems(myBeverage,'mine');
         inputMoney = inputMoney-cartCost;
-        cart = [];
-        items.forEach((item)=>item.cart = 0);
-        cartContainer.innerHTML = '';
-        cartCost = 0;
+        clearCart(); 
     })
-}
-
-function takeBeverage(){
-    return myBeverage.map((item)=>createBeverItem(item)).join('');
-}
-
-function createBeverItem(item){
-    return `
-    <li>
-        <button type="button" class="btn-staged">
-            <img src=${item.src} class="img-item-staged">
-            <strong class="tit-item-staged">${item.name}</strong>
-            <span class="price-item-staged">${item.mine}</span>
-        </button>
-    </li>
-    `
-}
-
-function init(items){
-    txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
-    displayItems(items); 
-    setEventListener(items); 
-    removeCart(); 
-    addMondy();
-    getItem(); 
 }
 
 function makeMoneyDot(money){
@@ -204,6 +204,16 @@ function makeMoneyDot(money){
     return result;
 }
 
+function init(items){
+    txtMyMoney.textContent = `${makeMoneyDot(myMoney)} 원`;
+    displayItems(); 
+    addCart(); 
+    removeCart(); 
+    addMoney();
+    backMoney();
+    getItem(); 
+}
+
 loadItems()
-    .then(items => init(items))
+    .then(() => init())
     .catch(console.log('음료 데이터를 불러오지 못했습니다.'));
